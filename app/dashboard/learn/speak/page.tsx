@@ -38,14 +38,22 @@ export default function Speaking() {
   const [progress, setProgress] = useState(0)
   const [recognition, setRecognition] = useState<any>(null)
   const [waveformData, setWaveformData] = useState<number[]>(new Array(32).fill(0))
+  const [isRecognitionSupported, setIsRecognitionSupported] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | null>(null)
 
   const currentSentence = sampleSentences[currentIndex]
 
+  // Check if component is mounted (client-side only)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
+      setIsRecognitionSupported(true)
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
       const recognitionInstance = new SpeechRecognition()
       
@@ -212,7 +220,10 @@ export default function Speaking() {
     setProgress(0)
   }
 
-  const isRecognitionSupported = typeof window !== 'undefined' && 'webkitSpeechRecognition' in window
+  // Don't render until mounted to avoid hydration mismatch
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <div className="sticky top-0 w-full h-full flex flex-col shadow-md md:rounded-s-[inherit] min-[1024px]:rounded-e-3xl bg-background">
