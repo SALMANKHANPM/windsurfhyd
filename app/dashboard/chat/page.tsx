@@ -336,11 +336,7 @@ export default function Chat() {
             isError={message.role === "error"}
             media={message.media}
           >
-            {typeof message.content === "string" ? (
-              <p>{message.content}</p>
-            ) : (
-              message.content
-            )}
+            {message.content}
           </ChatMessage>
         ))}
         {isLoading && (

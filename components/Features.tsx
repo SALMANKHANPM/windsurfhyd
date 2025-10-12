@@ -14,30 +14,30 @@ interface FeatureProps {
 }
 
 const Features = ({
-  heading = "Learn to Read, Speak and Write ..",
+  heading = "Learn to Read, Speak and Write Telugu, English",
   description = "Our Features",
   feature1 = {
-    title: "UI/UX Design",
+    title: "AI-Powered Chat Assistant",
     description:
-      "Creating intuitive user experiences with modern interface design principles and user-centered methodologies.",
+      "Engage in natural conversations with our intelligent AI assistant that understands both Telugu and English. Get instant responses, translations, and contextual help for your language learning journey.",
     image: "https://shadcnblocks.com/images/block/placeholder-1.svg",
   },
   feature2 = {
-    title: "Responsive Development",
+    title: "Speech Recognition & Transcription",
     description:
-      "Building websites that look and function perfectly across all devices and screen sizes.",
+      "Practice speaking Telugu with real-time audio transcription powered by Whisper AI. Get instant feedback on pronunciation and see your spoken words transcribed accurately in both Telugu and English.",
     image: "https://shadcnblocks.com/images/block/placeholder-2.svg",
   },
   feature3 = {
-    title: "Brand Integration",
+    title: "Interactive Learning Modules",
     description:
-      "Seamlessly incorporating your brand identity into every aspect of your website's design.",
+      "Master Telugu through engaging exercises including speaking practice, quizzes, text matching, and writing exercises. Learn at your own pace with structured lessons designed for effective language acquisition.",
     image: "https://shadcnblocks.com/images/block/placeholder-1.svg",
   },
   feature4 = {
-    title: "Performance Optimization",
+    title: "Multimodal Learning Experience",
     description:
-      "Ensuring fast loading times and smooth performance through optimized code and assets.",
+      "Learn through multiple channels - text, audio, and images. Upload images for context-aware conversations, practice with audio exercises, and receive personalized feedback to accelerate your Telugu learning.",
     image: "https://shadcnblocks.com/images/block/placeholder-2.svg",
   },
 }) => {

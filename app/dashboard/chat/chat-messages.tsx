@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   TooltipProvider,
   Tooltip,
@@ -41,13 +43,47 @@ type MessageMedia = {
   size?: number;
 };
 
-type ChatMessageProps = {
-  isUser?: boolean;
-  isError?: boolean;
+type MessageContentProps = {
   children: React.ReactNode;
-  media?: MessageMedia[];
-  timestamp?: string;
 };
+
+function MessageContent({ children }: MessageContentProps) {
+  // If children is a string, render it as Markdown
+  if (typeof children === "string") {
+    return (
+      <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-p:leading-relaxed prose-strong:font-semibold prose-ul:my-2 prose-li:my-1">
+        <ReactMarkdown 
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+            strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+            ul: ({ children }) => <ul className="list-disc pl-6 space-y-1 my-2">{children}</ul>,
+            ol: ({ children }) => <ol className="list-decimal pl-6 space-y-1 my-2">{children}</ol>,
+            li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+            code: ({ children, className }) => {
+              const isInline = !className;
+              return isInline ? (
+                <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>
+              ) : (
+                <code className={className}>{children}</code>
+              );
+            },
+            pre: ({ children }) => (
+              <pre className="bg-muted p-4 rounded-lg overflow-x-auto my-2">
+                {children}
+              </pre>
+            ),
+          }}
+        >
+          {children}
+        </ReactMarkdown>
+      </div>
+    );
+  }
+
+  // Otherwise, render as JSX
+  return <>{children}</>;
+}
 
 // Utility function to truncate filename for mobile
 function truncateFilename(filename: string, maxLength: number = 10): string {
@@ -114,7 +150,7 @@ export function ChatMessage({
             </div>
           )}
 
-          {children}
+          <MessageContent>{children}</MessageContent>
 
           {media && media.length > 0 && (
             <div className="mt-3 space-y-3">

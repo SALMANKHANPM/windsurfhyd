@@ -16,7 +16,7 @@ export default function Home() {
       <PoweredBy />
       <OurTeam />
       <Contact />
-      <Footer logo={<NavbarLogo />} brandName="Conversational AI" />
+      {/* <Footer logo={<NavbarLogo />} brandName="Conversational AI" /> */}
     </div>
   );
 }
