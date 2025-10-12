@@ -32,12 +32,11 @@ import time
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from guardrails import Guard
-from .guardrails.toxic_language_detector.validator.main import ToxicLanguage
+# from .guardrails.toxic_language_detector.validator.main import ToxicLanguage
 
-from .api.model_downloader import download_model
+# # from .api.model_downloader import download_model
 
-from .api.transcribe import transcribe_m4t, validate_audio
+# from .api.transcribe import transcribe_m4t, validate_audio
 # Initialize logger with more detailed format
 logging.basicConfig(
     level=logging.INFO,
@@ -86,14 +85,14 @@ class ImageRequest(BaseModel):
     image_data: str = Field(..., description="Base64 encoded image data")
 
 # Initialize Guard with toxic language detection
-guard = Guard().use_many(
-    ToxicLanguage(
-    threshold=float(os.getenv("TOXIC_THRESHOLD", "0.5")),
-    validation_method=os.getenv("VALIDATION_METHOD", "sentence"),
-    on_fail="fix",
-    device=os.getenv("DEVICE", "mps"),
-    use_local=True),
-)
+# guard = Guard().use_many(
+#     ToxicLanguage(
+#     threshold=float(os.getenv("TOXIC_THRESHOLD", "0.5")),
+#     validation_method=os.getenv("VALIDATION_METHOD", "sentence"),
+#     on_fail="fix",
+#     device=os.getenv("DEVICE", "mps"),
+#     use_local=True),
+# )
 
 # Initialize LLM
 llm = ChatOpenAI(
@@ -177,6 +176,10 @@ async def validate(request: ValidateRequest):
     except Exception as e:
         logger.error("Validation error: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/py/health")
+def health():
+    return 200
 
 @app.post("/api/py/transcribe")
 # async def transcribe(request: Request):
@@ -320,8 +323,8 @@ def read_root():
 
 def setup():
     logger.info("Setting up the application... : Backend API")
-    logger.info("Looking for Transformers model :  Seamless-M4T-V2-Large")
-    SEAMLESS_MODEL_PATH="~/.cache/huggingface/hub/facebook/seamless-m4t-v2-large"
-    if not os.path.exists(SEAMLESS_MODEL_PATH):
-        logger.info("Downloading Seamless-M4T-V2-Large model...")
-        download_model(SEAMLESS_MODEL_PATH)
+    # logger.info("Looking for Transformers model :  Seamless-M4T-V2-Large")
+    # SEAMLESS_MODEL_PATH="~/.cache/huggingface/hub/facebook/seamless-m4t-v2-large"
+    # if not os.path.exists(SEAMLESS_MODEL_PATH):
+    #     logger.info("Downloading Seamless-M4T-V2-Large model...")
+    #     download_model(SEAMLESS_MODEL_PATH)
