@@ -133,7 +133,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <div className="flex flex-col items-center justify-center p-10">
-                <NavbarLogo />
+                {/* <NavbarLogo /> */}
+                <h2 className="text-2xl font-semibold font-sans italic">
+                  LearnSurf
+                </h2>
               </div>
             </SidebarMenuButton>
 

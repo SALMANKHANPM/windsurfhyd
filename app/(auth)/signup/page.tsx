@@ -18,7 +18,7 @@ export default function SignupPage() {
           <div className="flex flex-col items-center gap-y-2">
             {/* Logo */}
             <div className="flex items-center gap-1 lg:justify-start">
-              <NavbarLogo />
+              {/* <NavbarLogo /> */}
             </div>
             <h2 className="text-2xl font-semibold font-sans">
               Conversational AI
