@@ -2,7 +2,7 @@ import { ProcessOptions } from "@/lib/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://w7kcdj7s-8001.inc1.devtunnels.ms:8001/";
+  "http://localhost:8080";
 
 // Check if API is available
 async function checkApiAvailability(): Promise<boolean> {
@@ -34,7 +34,7 @@ export async function validateText(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ text }),
-      signal: AbortSignal.timeout(10000), // 10 second timeout
+      signal: AbortSignal.timeout(20000), // 10 second timeout
     });
 
     if (!response.ok) {
@@ -79,7 +79,7 @@ export async function processPrompt(
       );
     }
 
-    let transcriptionData = { transcription: null, translation: null };
+    let transcriptionData: { tel?: string | null; eng?: string | null; generation?: string } = {};
 
     // If there's audio data, transcribe it first
     if (options?.audio_data) {
@@ -96,6 +96,8 @@ export async function processPrompt(
         // Create form data for transcription
         const formData = new FormData();
         formData.append("file", audioBlob, "audio.wav");
+        // Add language parameter (default to Telugu if not specified)
+        formData.append("lang", options.sourceLang || "te");
 
         // Send transcription request
         const transcriptionResponse = await fetch(
@@ -103,7 +105,7 @@ export async function processPrompt(
           {
             method: "POST",
             body: formData,
-            signal: AbortSignal.timeout(30000), // 30 second timeout for audio processing
+            signal: AbortSignal.timeout(40000), // 40 second timeout for audio processing
           }
         );
 
@@ -113,9 +115,21 @@ export async function processPrompt(
         }
 
         transcriptionData = await transcriptionResponse.json();
+        
+        console.log("Transcription response:", transcriptionData);
 
+        // Extract Telugu and English from response
+        const teluguText = transcriptionData.tel || "";
+        const englishText = transcriptionData.eng || "";
+        
         // Append transcription to prompt for LLM processing
-        prompt = `${prompt}\n\nTranscribed Audio: ${transcriptionData.transcription}\nTranslation: ${transcriptionData.translation}`;
+        if (teluguText && englishText) {
+          prompt = `${prompt}\n\nTelugu: ${teluguText}\nEnglish: ${englishText}`;
+        } else if (teluguText) {
+          prompt = `${prompt}\n\nTelugu: ${teluguText}`;
+        } else if (englishText) {
+          prompt = `${prompt}\n\nEnglish: ${englishText}`;
+        }
       } catch (error) {
         console.error("Transcription error:", error);
         if (error instanceof Error) {
@@ -155,12 +169,12 @@ export async function processPrompt(
           audio_data: undefined,
         },
       }),
-      signal: AbortSignal.timeout(30000), // 30 second timeout
+      signal: AbortSignal.timeout(40000), // 30 second timeout
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || "Processing request failed");
+      throw new Error(error.error || "Processing request failed, Models not running");
     }
 
     const result = await response.json();
@@ -169,8 +183,8 @@ export async function processPrompt(
     return {
       status: "success",
       response: {
-        tel: transcriptionData.transcription || null,
-        eng: transcriptionData.translation || null,
+        tel: transcriptionData.tel || null,
+        eng: transcriptionData.eng || null,
         generation: result.response,
       },
     };

@@ -99,7 +99,8 @@ const Navbar = ({
               <Link href={"/"} className="flex items-center gap-2 p-4">
                 {/* <KLUniversityLogo />
                 <KlGlugLogo /> */}
-                <NavbarLogo />
+                {/* <NavbarLogo /> */}
+                <h2 className="text-2xl font-bold italic">LearnSurf</h2>
               </Link>
               <div className="flex items-center">
                 <NavigationMenu>

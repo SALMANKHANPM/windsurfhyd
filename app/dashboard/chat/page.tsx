@@ -65,7 +65,7 @@ export default function Chat() {
       try {
         const API_BASE_URL =
           process.env.NEXT_PUBLIC_API_BASE_URL ||
-          "https://w7kcdj7s-8001.inc1.devtunnels.ms:8001/";
+          "http://localhost:8080";
         const response = await fetch(`${API_BASE_URL}/health`, {
           method: "GET",
           signal: AbortSignal.timeout(5000),
@@ -269,12 +269,28 @@ export default function Chat() {
       };
       setMessages((prev) => [...prev, errorMessage]);
 
-      // Update API status if connection failed
+      // Only update API status if it's a genuine connection failure
+      // Don't mark as unavailable for processing errors or timeouts
       if (
         errorMsg.includes("Unable to connect") ||
-        errorMsg.includes("API server is not available")
+        errorMsg.includes("fetch failed")
       ) {
-        setApiStatus("unavailable");
+        // Re-check API status instead of immediately marking as unavailable
+        const recheckApiStatus = async () => {
+          try {
+            const API_BASE_URL =
+              process.env.NEXT_PUBLIC_API_BASE_URL ||
+              "http://localhost:8080";
+            const response = await fetch(`${API_BASE_URL}/health`, {
+              method: "GET",
+              signal: AbortSignal.timeout(3000),
+            });
+            setApiStatus(response.ok ? "available" : "unavailable");
+          } catch {
+            setApiStatus("unavailable");
+          }
+        };
+        recheckApiStatus();
       }
     } finally {
       setIsLoading(false);

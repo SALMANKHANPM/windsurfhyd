@@ -2278,11 +2278,26 @@ export function AI_Prompt({
       onSendMessage(value, uploadedFiles);
     }
 
+    // Clean up object URLs to prevent memory leaks
+    uploadedFiles.forEach((file) => {
+      if (file.audioUrl) {
+        URL.revokeObjectURL(file.audioUrl);
+      }
+      if (file.preview) {
+        URL.revokeObjectURL(file.preview);
+      }
+    });
+
     // Clear the form
     setValue("");
     setUploadedFiles([]);
     setAudioRecordings([]);
     adjustHeight(true);
+    
+    // Reset file input to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
