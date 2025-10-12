@@ -1,36 +1,194 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LearnSurf - Telugu Language Learning Platform 🌊
 
-## Getting Started
+A modern, AI-powered multimodal conversational platform for learning Telugu and English. Built with Next.js 15, React 19, and powered by advanced AI technologies.
 
-First, run the development server:
+## ✨ Features
 
+### 🤖 AI-Powered Chat Assistant
+- Natural conversations in both Telugu and English
+- Real-time translations and contextual help
+- Markdown support for rich text formatting
+- Image upload for context-aware conversations
+- Audio message support
+
+### 🎤 Speech Recognition & Transcription
+- Real-time audio transcription powered by Whisper AI
+- Bilingual transcription (Telugu ↔ English)
+- Pronunciation feedback
+- Interactive waveform visualization
+
+### 📚 Interactive Learning Modules
+- **Speaking Practice**: Improve pronunciation with real-time feedback
+- **Writing Practice**: Master Telugu script through interactive exercises
+- **Quizzes**: Test your knowledge with engaging quizzes
+- **Text Matching**: Practice vocabulary and sentence structure
+
+### 📊 Progress Tracking
+- User profile with learning statistics
+- Level progression system
+- Daily streak tracking
+- Lesson completion metrics
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15.2.4](https://nextjs.org) with Turbopack
+- **UI Library**: [React 19](https://react.dev)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with Typography plugin
+- **UI Components**: 
+  - [Radix UI](https://www.radix-ui.com) - Accessible component primitives
+  - [shadcn/ui](https://ui.shadcn.com) - Re-usable components
+  - [Lucide React](https://lucide.dev) - Beautiful icons
+- **Animations**: [Framer Motion](https://www.framer.com/motion)
+- **Markdown**: [react-markdown](https://github.com/remarkjs/react-markdown) with GitHub Flavored Markdown
+- **OCR**: [Tesseract.js](https://tesseract.projectnaptha.com) - Image text recognition
+- **Charts**: [Recharts](https://recharts.org)
+- **Drag & Drop**: [@dnd-kit](https://dndkit.com)
+- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes) - Dark mode support
+- **TypeScript**: Type-safe development
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+ or Bun
+- npm, yarn, pnpm, or bun package manager
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+bun install
+```
+
+3. Run the development server:
 ```bash
 npm run dev
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+# or
+bun run build
+bun start
+```
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+frontend/
+├── app/                      # Next.js App Router
+│   ├── (auth)/              # Authentication pages (login, signup)
+│   ├── dashboard/           # Main dashboard and features
+│   │   ├── chat/           # AI chat interface
+│   │   ├── learn/          # Learning modules (speak, write)
+│   │   ├── practice/       # Practice exercises (quiz, speaking, text matching)
+│   │   └── profile/        # User profile
+│   ├── page.tsx            # Landing page
+│   ├── layout.tsx          # Root layout
+│   └── globals.css         # Global styles
+├── components/              # Reusable components
+│   ├── ui/                 # shadcn/ui components
+│   ├── sidebar/            # Sidebar navigation
+│   ├── kokonutui/          # Custom UI components
+│   └── ...                 # Feature components
+├── hooks/                   # Custom React hooks
+├── lib/                     # Utility functions and API
+│   ├── api.ts              # API client
+│   ├── types.ts            # TypeScript types
+│   └── utils.ts            # Helper functions
+└── public/                  # Static assets
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Key Features Implementation
 
-## Deploy on Vercel
+### Markdown Support
+All chat messages support rich Markdown formatting including:
+- **Bold** and *italic* text
+- Lists (ordered and unordered)
+- Code blocks with syntax highlighting
+- Links and images
+- Tables (via GFM)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Speech Recognition
+Utilizes the Web Speech API with custom TypeScript definitions for:
+- Real-time speech-to-text conversion
+- Language detection
+- Confidence scoring
+- Error handling
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Responsive Design
+- Mobile-first approach
+- Adaptive layouts for all screen sizes
+- Touch-friendly interactions
+- Optimized for tablets and desktops
+
+### Dark Mode
+Full dark mode support with automatic theme detection and manual toggle.
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+
+## 🌐 API Integration
+
+The frontend connects to a Python backend API for:
+- AI chat completions
+- Audio transcription (Whisper)
+- Language translation
+- User authentication
+- Progress tracking
+
+API endpoints are configured in `lib/api.ts`.
+
+## 🎯 Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+## 👥 Team - VibeCoder
+
+- **Salman** - Developer
+- **Srihari** - Developer
+- **Atul** - Developer
+- **Asmitha** - Developer
+- **Somanshu Dev** - Developer
+
+## 📝 License
+
+This project is private and proprietary.
+
+## 🤝 Contributing
+
+This is a team project. For contributions, please follow the established code style and submit pull requests for review.
+
+## 📚 Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Radix UI Documentation](https://www.radix-ui.com/docs)
+
+---
+
+Built with ❤️ by Team VibeCoder

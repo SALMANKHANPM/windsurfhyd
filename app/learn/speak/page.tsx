@@ -9,6 +9,53 @@ import { Volume2, Mic, MicOff, RotateCcw } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LearnNavigation } from '@/components/learn-navigation'
 
+// Type definitions for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+    webkitSpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+  }
+}
+
 interface Sentence {
   id: number
   english: string
@@ -39,7 +86,7 @@ export default function LearnToSpeakPage() {
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
   const [waveformData, setWaveformData] = useState<number[]>(new Array(32).fill(0))
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number | undefined>(undefined)
 
   const currentSentence = sampleSentences[currentIndex]
 
@@ -53,7 +100,7 @@ export default function LearnToSpeakPage() {
       recognitionInstance.interimResults = false
       recognitionInstance.lang = 'en-US'
 
-      recognitionInstance.onresult = (event) => {
+      recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript
         const score = calculateSimilarity(currentSentence.english, transcript)
         const message = getScoreMessage(score)
@@ -69,7 +116,8 @@ export default function LearnToSpeakPage() {
         stopWaveform()
       }
 
-      recognitionInstance.onerror = () => {
+      recognitionInstance.onerror = (event: Event) => {
+        console.error('Speech recognition error:', event)
         setIsListening(false)
         stopWaveform()
       }

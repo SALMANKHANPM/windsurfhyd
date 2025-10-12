@@ -43,6 +43,14 @@ type MessageMedia = {
   size?: number;
 };
 
+type ChatMessageProps = {
+  isUser?: boolean;
+  isError?: boolean;
+  children: React.ReactNode;
+  media?: MessageMedia[];
+  timestamp?: string;
+};
+
 type MessageContentProps = {
   children: React.ReactNode;
 };
